@@ -19,15 +19,7 @@ void time() {
         minute = fallbackMinute;
 
 
-        // Display a warning on the matrix if NTP sync fails multiple times
-        if (failedAttempts >= 3) {
-            matrix.fillScreen(0);
-            matrix.setCursor(1, 0);
-            matrix.setTextSize(1.175);
-            matrix.setTextColor(matrix.Color(255, 0, 0));
-            matrix.printf("NTP SYNC FAIL\n");
-            matrix.show();
-        }
+
     }
 }
 

@@ -1,69 +1,69 @@
 #ifndef ERRORSTATE_H
 #define ERRORSTATE_H
 
+#include <functional>
+#include <map>
+
 #include "common.h"
-#include "DisplayStuff.h"
 
-bool checkForErrors();
-void blinkCornerLED();
-void displayErrorScreen();
-void handleErrors();
+// Error codes
+enum class ErrorCode {
+    NONE,
+    WIFI_DISCONNECTED,
+    TIME_NOT_SYNCED
+};
 
+// Error handler callback type
+using ErrorHandlerCallback = std::function<void(ErrorCode)>;
 
-
-bool checkForErrors() {
-    bool hasErrors = false;
-
-    // Check WiFi connection status
-    if (WiFi.status() != WL_CONNECTED) {
-        hasErrors = true;
+class ErrorState {
+public:
+    ErrorState() {
+        // Initialize error handler callbacks
+        _errorHandlers[ErrorCode::WIFI_DISCONNECTED] = nullptr;
+        _errorHandlers[ErrorCode::TIME_NOT_SYNCED] = nullptr;
     }
 
-    // Check NTP sync status
-    if (!getLocalTime(&timeinfo)) {
-        hasErrors = true;
-    }
-
-    return hasErrors;
-}
-
-void blinkCornerLED() {
-    if (checkForErrors() && (millis() - lastBlinkTime >= blinkInterval)) {
-        matrix.drawPixel(0, 0, matrix.Color(0, 0, 255)); // Blue LED
-        matrix.show();
-        lastBlinkTime = millis();
-        blinkLED = !blinkLED; // Toggle the blinkLED flag
-    } else if (!checkForErrors() && (millis() - lastBlinkTime >= blinkInterval)) {
-        matrix.drawPixel(0, 0, 0); // Turn off the LED
-        matrix.show();
-        lastBlinkTime = millis();
-        blinkLED = !blinkLED; // Toggle the blinkLED flag
-    }
-}
-
-void displayErrorScreen() {
-    matrix.fillScreen(0);
-    matrix.setCursor(4, 2);
-    matrix.setTextColor(matrix.Color(255, 0, 0));
-    matrix.print("ERR");
-    matrix.show();
-}
-
-void handleErrors() {
-    if (checkForErrors()) {
-        if (hour != fallbackHour || minute != fallbackMinute) {
-            // Display the time with a blinking blue LED in the corner
-            updateTimeDisplay(displayErrorScreen);
-            blinkCornerLED();
+    void checkForErrors() {
+        // Check for WiFi connection
+        if (WiFi.status() != WL_CONNECTED) {
+            setError(ErrorCode::WIFI_DISCONNECTED);
         } else {
-            // Display the full error screen
-            displayErrorScreen();
+            clearError(ErrorCode::WIFI_DISCONNECTED);
         }
-    } else {
-        // Clear the error state
-        matrix.drawPixel(0, 0, 0); // Turn off the LED
-        matrix.show();
-    }
-}
 
-#endif
+        // Check for time sync
+        time_t now;
+        time(&now);
+        if (now < 1609459200) { // January 1, 2021
+            setError(ErrorCode::TIME_NOT_SYNCED);
+        } else {
+            clearError(ErrorCode::TIME_NOT_SYNCED);
+        }
+    }
+
+    void setErrorHandler(ErrorCode code, ErrorHandlerCallback callback) {
+        _errorHandlers[code] = callback;
+    }
+
+private:
+    void setError(ErrorCode code) {
+        if (!_errorFlags[code]) {
+            _errorFlags[code] = true;
+            if (_errorHandlers[code]) {
+                _errorHandlers[code](code);
+            }
+        }
+    }
+
+    void clearError(ErrorCode code) {
+        if (_errorFlags[code]) {
+            _errorFlags[code] = false;
+        }
+    }
+
+    std::map<ErrorCode, bool> _errorFlags;
+    std::map<ErrorCode, ErrorHandlerCallback> _errorHandlers;
+};
+
+#endif // ERRORSTATE_H

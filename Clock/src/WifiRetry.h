@@ -15,13 +15,7 @@ void WiFiReconnectTask(void* parameter) {
             Serial.printf("WiFi disconnected. Attempting to reconnect... Connection loss count: %d\n", connectionLossCount);
 
 
-            // Display a warning on the matrix if WiFi connection is lost
-            matrix.fillScreen(0);
-            matrix.setCursor(1, 0);
-            matrix.setTextSize(1.175);
-            matrix.setTextColor(matrix.Color(255, 0, 0));
-            matrix.printf("WIFI LOST\n");
-            matrix.show();
+
 
 
             WiFi.reconnect();

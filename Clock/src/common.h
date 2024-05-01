@@ -29,10 +29,16 @@ const char* ntpServer = "pool.ntp.org";
 const long gmtOffset_sec = 3600;
 const int daylightOffset_sec = 3600;
 
+bool Softerror = false;
+bool Harderror = false;
+
+
 int fallbackHour, fallbackMinute;
 const int DisplayPin = 32;
 const int SensorPin = 33;
 int hour, minute;
+
+bool displayUpdateRequired = true;
 
 Adafruit_NeoMatrix matrix = Adafruit_NeoMatrix(32, 8, DisplayPin, NEO_MATRIX_TOP + NEO_MATRIX_LEFT + NEO_MATRIX_COLUMNS + NEO_MATRIX_ZIGZAG, NEO_GRB + NEO_KHZ800);
 
