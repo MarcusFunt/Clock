@@ -62,11 +62,11 @@ void Light() {
         // Print the overall average light reading
         Serial.printf("Overall average light reading: %d\n", overallAverage);
 
-        if (overallAverage > 2099) {
-            overallAverage = 2099;
+        if (overallAverage > (maxreading-1)) {
+            overallAverage = (maxreading-1);
         }
 
-        lightIntensity = map(overallAverage, 0, 2100, 0, 255);
+        lightIntensity = map(overallAverage, 0, maxreading, 0, 255);
 
         // Update red and blue based on lightIntensity
         red = 255 - lightIntensity;

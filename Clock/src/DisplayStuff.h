@@ -14,7 +14,7 @@ int previousLightIntensity = -1;
 
 void Display() {
     if (displayUpdateRequired) {
-        int Brightness = map(lightIntensity, 0, 255, 1, 40);
+        int Brightness = map(lightIntensity, 0, 255, 1, brightnessofdisplay);
 
     
             Serial.println("Updating display");

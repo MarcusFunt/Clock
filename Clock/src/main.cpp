@@ -29,11 +29,14 @@ void lightSensorTask(void* parameter) {
     bool isWifiConnected = false;
 
 void setup() {
+
+    
     Serial.begin(115200);
     // Initialize the NeoMatrix display
     matrix.begin();
     matrix.setTextWrap(false);
     matrix.setBrightness(20); // Set the brightness to a moderate level
+
     // Play the bootup animation
     bootupAnimation();
     // Connect to WiFi
@@ -103,12 +106,13 @@ void loop() {
     Display();
     errorState.checkForErrors();
 
+
     static unsigned long lastFallbackUpdate = 0;
-    if (millis() - lastFallbackUpdate >= 3600000) { // Update fallback time every hour
+    if (millis() - lastFallbackUpdate >= fallbacktimeupdate) { // Update fallback time every hour
         updateFallbackTime();
         lastFallbackUpdate = millis();
     }
 
-    delay(200);
+    delay(loopdelay);
 }
 
