@@ -9,6 +9,10 @@
 
 #define WIFI_PASSWORD "Holmsteen"//Your password
 
+//#define OTA_PASSWORD "password"
+
+//#define OTA_HOSTNAME "hostname"
+
 
 //TIME
 
@@ -29,11 +33,11 @@
 
 #define NUMBEROFREADINGSPERREADING 5
 
-#define MAXACTUALLIGHT 2100
+#define MAXACTUALLIGHT 100
 
 //DISPLAY
 
-#define BRIGHTNESS 55
+#define BRIGHTNESS 255
 
 
 //MISC

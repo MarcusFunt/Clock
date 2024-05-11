@@ -22,7 +22,7 @@
 int previousbrightness = 0; // Initialize with default values
 int previousminute = 0;
 
-int blue, red;
+int blue, red, green;
 int lightIntensity = 0;
 void WiFiReconnectTask(void* parameter);
 

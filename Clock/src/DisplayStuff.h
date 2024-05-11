@@ -14,7 +14,7 @@ int previousLightIntensity = -1;
 
 void Display() {
     if (displayUpdateRequired) {
-        int Brightness = map(lightIntensity, 0, 255, 1, brightnessofdisplay);
+        int Brightness = map(lightIntensity, 0, 255, 5, brightnessofdisplay);
 
     
             Serial.println("Updating display");
@@ -28,7 +28,7 @@ void Display() {
             matrix.fillScreen(0);  // Clear the screen
             matrix.setCursor(1, 0);  // Set the cursor position to the top-left corner
             matrix.setTextSize(1.175);
-            matrix.setTextColor(matrix.Color(red, 0, blue));  // Set the text color
+            matrix.setTextColor(matrix.Color(red, blue, blue));  // Set the text color
 
             if (!matrix.printf("%02d:%02d\n", hour, minute)) {
                 // Display update failed

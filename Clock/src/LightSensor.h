@@ -1,7 +1,7 @@
 // LightSensor.h
 
 
-#define LIGHT_HISTORY_SIZE 10
+
 #include "common.h"
 
 
